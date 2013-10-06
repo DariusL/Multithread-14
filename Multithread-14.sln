@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Multithread-14", "Multithread-14\Multithread-14.vcxproj", "{5E06A306-EAD1-40E4-B384-1EAA44940CEA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5E06A306-EAD1-40E4-B384-1EAA44940CEA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{5E06A306-EAD1-40E4-B384-1EAA44940CEA}.Debug|Win32.Build.0 = Debug|Win32
+		{5E06A306-EAD1-40E4-B384-1EAA44940CEA}.Release|Win32.ActiveCfg = Release|Win32
+		{5E06A306-EAD1-40E4-B384-1EAA44940CEA}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
