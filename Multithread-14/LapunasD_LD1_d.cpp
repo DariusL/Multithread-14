@@ -43,50 +43,50 @@ string Print(int nr, Struct &s);
 void syncOut(vector<vector<Struct>>&);
 void asyncOut(int proc, vector<Struct>&);
 
-vector<vector<Struct>> ReadStuff(string file);
-vector<string> ReadLines(string file);
+vector<Struct> ReadStuff(string file, int nr);
+vector<string> ReadLines(string file, int nr);
 
 int main(int argc, char *argv[])
 {
-	auto input = ReadStuff("LapunasD.txt");
 	MPI_Init(&argc, &argv);
 	int nr;
 	MPI_Comm_rank(MPI_COMM_WORLD, &nr);
-	
-	asyncOut(nr, input[nr]);
+	auto input = ReadStuff("LapunasD.txt", nr);
 
-	system("pause");
+	asyncOut(nr, input);
+
 	MPI_Finalize();
 	return 0;
 }
 
-vector<vector<Struct>> ReadStuff(string file)
+vector<Struct> ReadStuff(string file, int nr)
 {
-	auto lines = ReadLines(file);
-	vector<vector<Struct>> ret;
-	vector<Struct> tmp;
+	auto lines = ReadLines(file, nr);
+	vector<Struct> ret;
 	for(int i = 0; i < lines.size(); i++)
 	{
-		if(lines[i] == "")
-		{
-			ret.push_back(move(tmp));
-		}
-		else
-		{
-			tmp.emplace_back(lines[i]);
-		}
+		ret.emplace_back(lines[i]);
 	}
 	return ret;
 }
 
-vector<string> ReadLines(string file)
+vector<string> ReadLines(string file, int nr)
 {
 	vector<string> ret;
 	ifstream duom(file);
+	int prc = 0;
+	string line;
+	while(!duom.eof() && prc != nr)
+	{
+		getline(duom, line);
+		if(line == "")
+			prc++;
+	}
 	while(!duom.eof())
 	{
-		string line;
 		getline(duom, line);
+		if(line == "")
+			break;
 		ret.push_back(line);
 	}
 	return ret;
