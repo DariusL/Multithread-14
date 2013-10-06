@@ -51,6 +51,21 @@ int main(int argc, char *argv[])
 	MPI_Init(&argc, &argv);
 	int nr;
 	MPI_Comm_rank(MPI_COMM_WORLD, &nr);
+
+	if(nr == 0)
+	{
+		int size;
+		MPI_Comm_size(MPI_COMM_WORLD, &size);
+		vector<vector<Struct>> all;
+		for(int i = 0; i < size; i++)
+			all.push_back(move(ReadStuff("LapunasD.txt", i)));
+		cout << "\nsinchroninis isvedimas\n\n";
+		syncOut(all);
+		cout << "\nasinchroninis isvedimas\n\n";
+		cout << setw(12) << "Procesas" << setw(3) << "Nr" << Titles() << "\n\n";
+	}
+
+	MPI_Barrier(MPI_COMM_WORLD);
 	auto input = ReadStuff("LapunasD.txt", nr);
 
 	asyncOut(nr, input);
