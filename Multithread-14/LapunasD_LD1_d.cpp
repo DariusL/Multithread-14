@@ -7,6 +7,14 @@
 #include <sstream>
 #include <mpi.h>
 
+/*
+	1. Procesas padaro atsitiktini skaiciu iteraciju
+	2. Atsitiktine
+
+	3. openMP
+	4. 2.0 - 2.8 GHz, 4 fiziniai, 8 loginiai branduoliai, 8GB RAM, GT 525m
+*/
+
 using namespace std;
 
 struct Struct
@@ -43,20 +51,27 @@ string Print(int nr, Struct &s);
 void syncOut(vector<vector<Struct>>&);
 void asyncOut(int proc, vector<Struct>&);
 
+//perskaito proceso duomenis pagal nr
 vector<Struct> ReadStuff(string file, int nr);
+//perskaito proceso duomenu eilutes pagal nr
 vector<string> ReadLines(string file, int nr);
 
 int main(int argc, char *argv[])
 {
+	//MPI paleidimas
 	MPI_Init(&argc, &argv);
 	int nr;
+	//proceso nr
 	MPI_Comm_rank(MPI_COMM_WORLD, &nr);
 
+	//pirmas procesas atlieka sinchronini visu duomenu isvedima ir ispausdina antrastes
 	if(nr == 0)
 	{
 		int size;
+		//procesu kiekis
 		MPI_Comm_size(MPI_COMM_WORLD, &size);
 		vector<vector<Struct>> all;
+		//perskaitomi visu procesu duomenys
 		for(int i = 0; i < size; i++)
 			all.push_back(move(ReadStuff("LapunasD.txt", i)));
 		cout << "\nsinchroninis isvedimas\n\n";
@@ -65,9 +80,12 @@ int main(int argc, char *argv[])
 		cout << setw(12) << "Procesas" << setw(3) << "Nr" << Titles() << "\n\n";
 	}
 
+	//blokuoja kol visi procesai pasiekia barjera
+	//naudojamas, kad procesai lauktu kol pirmas atlieka spausdinima
 	MPI_Barrier(MPI_COMM_WORLD);
 	auto input = ReadStuff("LapunasD.txt", nr);
 
+	//lygiagretus spausdinimas
 	asyncOut(nr, input);
 
 	MPI_Finalize();
